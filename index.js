@@ -27,10 +27,17 @@ client.connect((err) => {
   });
 
   app.get("/products", (req, res) => {
-    productsCollection.find({}).toArray((err, documents) => {
+    const search = req.query.search;
+    productsCollection.find({name: {$regex: search }}).toArray((err, documents) => {
       res.send(documents);
     });
   });
+  // app.get("/products", (req, res) => {
+  //   const search = req.query.search;
+  //   productsCollection.find({name: {$regex: search }}).toArray((err, documents) => {
+  //     res.send(documents);
+  //   });
+  // });
 
   app.get("/product/:key", (req, res) => {
     productsCollection
@@ -57,7 +64,7 @@ client.connect((err) => {
 });
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Hello World!"); 
 });
 
 app.listen(process.env.PORT || 3100);
